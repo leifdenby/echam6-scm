@@ -1,0 +1,281 @@
+; should be used through `make-forcing-scm.py`
+
+
+;load "/usr/local/lib/ncarg/nclscripts/csm/contributed.ncl"
+;load "/usr/local/lib/ncarg/nclscripts/csm/gsn_code.ncl"
+;load "/usr/local/lib/ncarg/nclscripts/csm/gsn_csm.ncl"
+
+begin 
+Author    = "Leif Denby, based on script by Jeff Cao"
+Institute = "Cambridge"
+Purpose   = "Single Column Model Forcing for ECHAM 6.1"
+History   = "generated ECHAM forcing file"
+
+f_source  = addfile("{source_filename}","r")
+f_vct     = addfile("{vct_filename}","r")
+fout      = addfile("{output_filename}","c")
+
+;--------------------------------------------
+plevs = f_source->lev(:)
+plevs = plevs*100
+print(plevs)
+
+psi = f_source ->Central_Facility_Ps
+p0 = 1.0
+
+;-------------------------------------------
+
+; The definition of the ECHAM grid to interpolate to is defined through the "A
+; & B coefficients", these are taken from an external file
+
+vct_a_32 = dble2flt(f_vct ->vct_a)
+vct_b_32 = dble2flt(f_vct ->vct_b)
+
+nlev = 47 
+vct_a_31  = new(nlev,"float")
+vct_b_31  = new(nlev,"float")
+
+do k=0,nlev-1
+vct_a_31(k) = (vct_a_32(k) + vct_a_32(k+1))/2
+vct_b_31(k) = (vct_b_32(k) + vct_b_32(k+1))/2
+end do
+
+hyai = vct_a_32 
+hybi = vct_b_32 
+
+hyao = vct_a_31 
+hybo = vct_b_31 
+
+;------------------------------------
+;Transform to hybrid each variable 
+
+ps = new((/dimsizes(f_source->time),1,1/),"float")
+ps(:,0,0) = psi
+ps= ps*100
+ui = new((/dimsizes(f_source->time),dimsizes(f_source->lev),1,1/),"float") 
+vi = new((/dimsizes(f_source->time),dimsizes(f_source->lev),1,1/),"float")
+ti = new((/dimsizes(f_source->time),dimsizes(f_source->lev),1,1/),"float")
+qi = new((/dimsizes(f_source->time),dimsizes(f_source->lev),1,1/),"float")
+omegai = new((/dimsizes(f_source->time),dimsizes(f_source->lev),1,1/),"float")
+ddt_ti = new((/dimsizes(f_source->time),dimsizes(f_source->lev),1,1/),"float")
+ddt_qi = new((/dimsizes(f_source->time),dimsizes(f_source->lev),1,1/),"float")
+divi = new((/dimsizes(f_source->time),dimsizes(f_source->lev),1,1/),"float")
+
+ui(:,:,0,0) = f_source->u_wind(:,:,0,0)
+vi(:,:,0,0) = f_source->v_wind(:,:,0,0)
+ti(:,:,0,0) = f_source->Temp(:,:,0,0)
+qi(:,:,0,0) = f_source->H2O_Mixing_Ratio(:,:,0,0)   
+omegai(:,:,0,0) = f_source->omega(:,:,0,0)
+ddt_ti(:,:,0,0) = f_source->Horizontal_Temp_Advec(:,:,0,0) + f_source->Vertical_s_Advec(:,:,0,0)
+ddt_qi(:,:,0,0) = f_source->Horizontal_q_Advec(:,:,0,0) + f_source->Vertical_q_Advec(:,:,0,0) 
+divi(:,:,0,0) = f_source->Wind_Div(:,:,0,0)
+
+u = pres2hybrid(plevs,ps,p0,ui,hyao,hybo,4)
+
+v = pres2hybrid(plevs,ps,p0,vi,hyao,hybo,4)
+
+t = pres2hybrid(plevs,ps,p0,ti,hyao,hybo,4)
+
+q = pres2hybrid(plevs,ps,p0,qi,hyao,hybo,2)
+
+ddt_t = pres2hybrid(plevs,ps,p0,ddt_ti,hyao,hybo,4)
+
+ddt_q = pres2hybrid(plevs,ps,p0,ddt_qi,hyao,hybo,4)
+
+omega = pres2hybrid(plevs,ps,p0,omegai,hyao,hybo,4)
+
+div = pres2hybrid(plevs,ps,p0,divi,hyao,hybo,4)
+
+nlevs = ispan(1,nlev,1)
+nlevs!0 = "nlev"
+nlevs@units = "level"
+
+
+startdate = greg2jul(1997,06,18,23)
+slm = 1.0
+
+; ------------------------------------------------
+
+; Write data to file ; Do assignment to data here
+
+setfileoption(fout,"DefineMode",True)
+
+dimNames = (/"time", "nlev", "nvclev"/)  
+dimSizes = (/ -1   , nlev, nlev+1 /) 
+dimUnlim = (/ True , False, False/)   
+filedimdef(fout,dimNames,dimSizes,dimUnlim)
+
+var_names2D = (/ "ddt_u", "ddt_v", "ddt_t", "ddt_q", "omega","div", "t", "q", "ql", "qi", "u", "v" /)
+var_types2D  = (/ "float", "float", "float",  "float", "float", "float", "float", "float", "float", "float", "float", "float"/)
+filevardef( fout, var_names2D, var_types2D, (/ "time","nlev" /))
+
+tempAtt = 0
+tempAtt@long_name = "Large Scale U tendency"
+tempAtt@units     = "m/s^2"
+filevarattdef( fout, "ddt_u", tempAtt ) 
+
+tempAtt = 0
+tempAtt@long_name = "Large Scale V tendency"
+tempAtt@units     = "m/s^2"
+filevarattdef( fout, "ddt_v", tempAtt )
+
+tempAtt = 0
+tempAtt@long_name = "Large Scale T tendency"
+tempAtt@units     = "K/s"
+filevarattdef( fout, "ddt_t", tempAtt )  
+
+tempAtt = 0
+tempAtt@long_name = "Large Scale Q tendency"
+tempAtt@units     = "Kg/s"
+filevarattdef( fout, "ddt_q", tempAtt )
+
+tempAtt = 0
+tempAtt@long_name = "Large Scale Subsidence"
+tempAtt@units     = "m/s^2"
+filevarattdef( fout, "omega", tempAtt )
+
+tempAtt = 0
+tempAtt@long_name = "Large Scale divergence"
+tempAtt@units     = "1/s"
+filevarattdef( fout, "div", tempAtt )
+
+tempAtt = 0
+tempAtt@long_name = "Large Scale U tendency"
+tempAtt@units     = "m/s^2"
+filevarattdef( fout, "ddt_u", tempAtt )       
+
+tempAtt = 0
+tempAtt@long_name = "Specific humidity"
+tempAtt@units     = "Kg/Kg"
+filevarattdef( fout, "q", tempAtt ) 
+
+tempAtt = 0
+tempAtt@long_name = "Temparature"
+tempAtt@units     = "K"
+filevarattdef( fout, "t", tempAtt ) 
+
+tempAtt = 0
+tempAtt@long_name = "Horizontal U velocity"
+tempAtt@units     = "m/s"
+filevarattdef( fout, "u", tempAtt ) 
+
+tempAtt = 0
+tempAtt@long_name = "Horizontal V velocity"
+tempAtt@units     = "m/s"
+filevarattdef( fout, "v", tempAtt ) 
+
+tempAtt = 0
+tempAtt@long_name = "Liquid mixing ratio"
+tempAtt@units     = "Kg/Kg"
+filevarattdef( fout, "ql", tempAtt )
+
+tempAtt = 0
+tempAtt@long_name = "Ice mixing ratio"
+tempAtt@units     = "Kg/Kg"
+filevarattdef( fout, "qi", tempAtt )          
+
+var_namesC   = (/ "lat", "lon", "date" ,"slm" /)
+var_typesC   = (/ "float","float","float", "float"/)
+filevardef( fout, var_namesC, var_typesC, (/"ncl_scalar"/))
+
+tempAtt = 0
+tempAtt@long_name = "latitude"
+tempAtt@units     = "degrees_N"
+filevarattdef( fout, "lat", tempAtt )
+
+tempAtt = 0
+tempAtt@long_name = "longitude"
+tempAtt@units     = "degrees_E"
+filevarattdef( fout, "lon", tempAtt )         
+
+tempAtt = 0
+tempAtt@long_name = "Land Sea mask"
+tempAtt@units     = "mask 0,1"
+filevarattdef( fout, "slm", tempAtt )   
+
+tempAtt = 0
+tempAtt@long_name = "Gregorian start date in yyyymmddhh"
+tempAtt@units     = "yyyymmddhh"
+filevarattdef( fout, "date", tempAtt )  
+
+var_names1D = (/ "time", "aps", "ts" /)
+var_types1D  = (/ "float", "float", "float"  /)
+filevardef( fout, var_names1D, var_types1D, (/ "time" /))
+
+tempAtt = 0
+tempAtt@long_name = "Surface Pressure"
+tempAtt@units     = "Pa"
+filevarattdef( fout, "aps", tempAtt ) 
+
+tempAtt = 0
+tempAtt@long_name = "Surface Temparature"
+tempAtt@units     = "K"
+filevarattdef( fout, "ts", tempAtt ) 
+
+
+var_names1Db=(/ "vct_a" , "vct_b" /)
+var_types1Db=(/ "double" , "double" /)
+filevardef( fout, var_names1Db, var_types1Db, (/ "nvclev" /))
+
+tempAtt = 0
+tempAtt@long_name = "vertical-coordinate parameter set A"
+tempAtt@units     = ""
+filevarattdef( fout, "vct_a", tempAtt ) 
+
+tempAtt = 0
+tempAtt@long_name = "vertical-coordinate parameter set B"
+tempAtt@units     = ""
+filevarattdef( fout, "vct_b", tempAtt ) 
+
+tempAtt = 0
+tempAtt@long_name = "Time since start of run"
+tempAtt@units     = "Seconds"
+tempAtt@start     = startdate                      
+filevarattdef( fout, "time", tempAtt ) 
+
+; -------------------------------------------------
+
+
+fAtt               = True            
+fAtt@History       = History
+fAtt@Created       = systemfunc ("date")
+fAtt@Institute     = Institute
+fAtt@Author        = Author
+fAtt@Title         = "forcing for ECHAM6 SCM"
+fileattdef( fout, fAtt )           
+
+
+tim1          = doubletofloat(f_source->time_offset)
+tim1          = doubletofloat(tim1-82803)
+
+print(tim1)
+
+fout->time    = (/tim1/)
+fout->lat     = (/36.61/)
+fout->lon     = (/262.51/)
+
+fout->nlev    = nlevs
+fout->slm     = 1.0
+fout->vct_a   = (/hyai/)
+fout->vct_b   = (/hybi/);
+fout->aps     = (/ps(:,0,0)/)
+fout->u       = (/u(:,:,0,0)/)
+fout->v       = (/v(:,:,0,0)/)
+
+fout->t(:,:)  = (/t(:,:,0,0)/)
+fout->q(:,:)  = (/q(:,:,0,0)/)/1000
+
+fout->ql(:,:) = (/q(:,:,:,:)/)*0.0
+fout->qi(:,:) = (/q(:,:,:,:)/)*0.0
+
+fout->ddt_t   = (/ddt_t(:,:,:,:)/)/3600
+fout->ddt_q   = (/ddt_q(:,:,:,:)/)/3600000
+
+fout->omega   = (/omega(:,:,:,:)/)/36
+fout->div     = (/div(:,:,:,:)/)
+
+ts            = f_source->Ts_Air
+ts            = ts+273.16
+fout->ts      = (/ts/)
+
+end

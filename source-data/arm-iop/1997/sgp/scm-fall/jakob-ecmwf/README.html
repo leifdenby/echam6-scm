@@ -1,0 +1,149 @@
+<html>
+<body bgcolor = white>
+<pre>
+The ARM SPECIAL ECMWF DDH archive for the SGP site contains 3*5 files.
+The data set has been created especially for the IOP 15.Sep.1997 to
+6.Oct.1997 using the ECMWF operational system of mid-1998 (!!!).
+One difference is that the data in the data set is available
+every model time step (i.e., every 20 minutes) instead of hourly. 
+A second difference is that a point close to the central
+facility has been included (see area description below). The 
+actual file contents is otherwise exactly the same as in the standard
+monthly data set we supply.
+
+The files  are 'tared' and compressed into one file named:
+
+ARM_SPECIAL_yymm_sgp.tar.Z
+
+
+There are three domains over which all the quantities are averaged.
+They are numbered 1,2,3. Domain 2 is equivalent to domain 29
+in the ordinary ARM data set, domain 3 to domain 28.
+
+The point/areas for the domains are:
+
+1: 262.67,36.22
+2: 261.7,37.,263.,36.
+3: 260.3,38.8,264.6,34.8
+
+
+For each of the domains there are 5 files per month:
+
+*_var_*
+*_flx_*
+*_ten_*
+*_sfc_*
+*_sfce_*
+
+Every day of data starts with a header (first 3 lines). The first line
+explains the second. The first for parameters on the second line are
+model internal parameters and are irrelevant for the user. The next four
+numbers mark the corners of the area over which the data was averaged
+(note that the model resolution is about 0.56x0.56 degrees). The third
+line has the headers for the columns which follow. 'idat' and 'itime' are
+the initial date and time of the forecast from which the data was 
+retrieved.'vdate' and 'vtime' are the verifying date and time of the
+data meaning date and time which it is valid for. Hence the difference
+to the initial date and time indicates the forecast range used. The next
+column ('lev') is the model level of the data followed by the data
+itself, which varies from file to file (see below). The pressure of each
+of the model levels can be retrieved from the *var* file, where it is
+stored in the first data column.
+
+The contents of the individual files is the following:
+
+*_var_*
+
+These files contain the model variables on the 31 model levels. Level 1
+is the top full level of the model (10 hPa), level 31 is the lowest 
+full level.
+
+The order of the variables is:
+
+p - pressure (Pa)
+u - zonal wind component (m/s)
+v - meridional wind component (m/s)
+T - temperature (K)
+q - specific humidity (kg/kg)
+l - specific cloud liquid water content (kg/kg)
+i - specific cloud ice content (kg/kg)
+a - cloud fraction (percent/100.)
+R - reative humidity (percent/100.)
+w - omega=vertical velocity in pressure coordinates (Pa/s)
+
+*_flx_*
+
+These files contain the radiative fluxes throughout the atmosphere.
+The fluxes are averages over the last hour.
+
+They are archived on the 32 so called flux levels of the model
+(often referred to as half-levels). The full levels on which the variables
+are stored are placed between two flux levels. Hence, level 32 represents
+the surface and level 1 the top of the atmosphere. Full level k is between
+half level k and k+1.
+
+The order of the fluxes is:
+
+fswr - net shortwave flux (W/m2)
+flwr - net longwave flux (W/m2)
+
+*_ten_*
+
+These files contain the total and physical tendencies for u,v,T and q on
+the 31 model levels. The units are as above per second.
+
+The order of the tendencies is:
+
+u total
+u physics
+v total
+v physics
+T total
+T physics
+q total
+q physics
+
+*_sfc_*
+
+These files contain surface variables and fluxes. The level number is set
+to 1.
+
+The order is:
+
+soil temperature in layer 1 (7 cm deep) (K)
+shortwave radiation (W/m2)
+longwave radiation (W/m2)
+latent heat flux over water (W/m2)
+latent heat flux over ice/snow (W/m2)
+sensible heat flux (W/m2)
+ground heat flux between layer 1 and layers 2/3/4 (W/m2)
+soil moisture in layer 1 (m3/m3)
+large-scale rain (mm/s)
+convective rain (mm/s)
+large-scale snow (mm/s)
+convective snow (mm/s)
+surface pressure (Pa)
+
+*_sfce_*
+
+These files contain extra near surface and surface variables in the
+following order:
+
+2m Temperature (K)
+2m specific humidity (kg/kg)
+10m wind u-component (m/s)
+10m wind v-component (m/s)
+skin temperature (K)
+albedo
+downward surface solar radiation (W/m2)
+downward surface longwave radiation (W/m2)
+
+Note:
+
+Very small (.lt.1.E-10 for precipitation and .lt. 1.E-1 for radiation)
+and small negative numbers in solar radiation and precipitation are 
+due to packing and unpacking mechanisms and do not represent 
+model problems !
+
+</pre>
+</html>

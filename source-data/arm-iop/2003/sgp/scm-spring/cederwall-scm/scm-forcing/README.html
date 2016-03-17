@@ -1,0 +1,51 @@
+<html><head><title></title>
+</head>
+<body bgcolor="#ffffff">
+<h1 align="center"></h1>
+
+<pre>
+
+Data content:
+~~~~~~~~~~~~
+
+Model forcing data sets, for the CPM Working Group, 
+produced using the Constrained Variational Analysis method,
+each being pertinent to a separate ARM IOP, conducted at SGP.
+
+Each data set was produced -- using 
+the ARM IOP 3-hourly sounding data (supplemented with RUC-2 
+analysis samples and NOAA wind profiler data) as the vertical
+atmospheric data, which were constrained with  
+the ARM ground surface measurements and 
+the NOAA GOES-8 satellite data.    
+
+
+Directory structure: (file names & description)  
+~~~~~~~~~~~~~~~~~~~
+(Files are listed below in an order suited to their explanation, which
+differs from the order you actually see them listed in the directory.)
+
+Note: yyyy or yy = year
+      mm = month
+      dd = day
+
+IOPforcing_VarAna.doc -- MS/Word document for the Constrained 
+		      Variational method as applied to IOP data; 
+layer_rd_anymon.for   -- Fortran code for reading text-formatted file
+		      named layer_<yymm>.dat 
+		      (for any data set -- IOP or precise month); 
+surface_rd_anymon.for -- Fortran code for reading text-formatted file
+		      named surface_<yymm>.dat 
+		      (for any data set -- IOP or precise month).
+
+layer_yymm.dat           -- text-formatted data file containing 
+			time-height (2-D) variables; 
+surface_yymm.dat         -- text-formatted data file containing
+			time-series (1-D) variables.
+sgp3hIOPsndgBasedV2.0_ConstrVarAnaX1.c1.yyyymmdd.000000.cdf
+		     -- all variables in one netCDF file. 
+
+</pre>
+<hr>
+Contact: Shaocheng Xie at <a href="mailto:xie2@llnl.gov">xie2@llnl.gov</a>
+</body></html>

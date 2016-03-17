@@ -1,0 +1,244 @@
+<html><head><title>Winter 1999 Single Column Model (SCM) IOP</title>
+</head>
+<body bgcolor="#ffffff">
+<h1 align="center">Winter 1999 Single Column Model (SCM) IOP</h1>
+
+<p>Seasonal SCM IOPs are conducted at the Southern Great Plains to enhance 
+the frequency of observations for SCM uses, particularly vertical soundings 
+of temperature, water vapor, and winds. The SCM IOPs are conducted for a 
+period of 21 days.  During that time, radiosondes are launched at the Central 
+Facility and the four boundary facilities eight times per day, seven days
+per week. The data are required for quantifying boundary forcing and column 
+response.</p>
+
+<p>Model results are available for the Winter 1999 SCM IOP. </p> 
+
+<p>Description:</p>
+
+<p>Analysis for the ARM Jan. 1999 IOP data:  The analysis is based on the
+variational method described in Zhang and Lin (1997) and Zhang et al.  (2001).
+For this particular analysis, the implementation version 2 (IV-2) of the 
+method was used.  This version inherits all of the features of IV-1 (used
+to process the ARM July 95 IOP) listed immediately below, and it also 
+includes the features new in IV-2, which are listed afterwards. </p>
+
+<p>(1) Hourly wind data from 17 profilers surrounding the ARM CART array have 
+been used as additional input.  </p>
+
+<p>(2) A scale-controlled statistical interpolation procedure similar to 
+Ooyama (1987) has been implemented in our pre-processing step. </p>
+
+<p>(3) Radar rainfall (4 by 4 km cells) have been used in the calculation of
+area-averaged precipitation estimation.</p>
+
+<p>(4) All upper-air data have been smoothed by using a three-point running mean
+in time as an attempt to de-aliase unresolvable features. </p>
+
+<p>(5) The error variance functions in the variational procedures vary with height
+according to estimation of both instrument and sampling uncertainties.</p>
+
+<p>(6) More rigorous quality control procedures have been implemented to screen 
+raw sounding and profiler data.</p>
+
+<p>(7) All constraint variables are derived by first gridding them and then
+taking the area average.  Measurements from a variety of platforms (SMOS,
+EBBR, SONDES, Ok Mesonet, Kansan Mesonet, ...) are merged to produce the
+gridded surface composites. Latent and sensible heat fluxes are obtained
+from the EBBR stations</p>
+
+<p>Implementation features new in IV-2 are:</p>
+
+<p>1.   the revised analysis has used re-scaled soundings.</p>
+
+<p>2.   all surface and TOA constraint variables are averaged to three hours
+centered at the 3-hourly sounding time with no other time filtering.  In the
+previous version, there was additional time filtering in the constraint surface
+and TOA variables.</p>
+
+<p>3.   Surface lower boundary condition of omega is used to form the column
+integrated budgets of moisture and energy.  These are provided in the
+single-level data file.  The previous version used rigid boundary surface
+boundary condition in forcing the column budgets.</p>
+
+<p>4.   Surface radiation measurements from the network of SIROS stations have
+ been used to merge with the net radiation from EBBR stations to derive the 
+area-mean surface radiation.  The SIROS longwave and shortwave upward and 
+downward radiative fluxes have been added to the single-level data file.</p>
+
+<p>5.   Surface latent and sensible heat fluxes from the ECOR network have been
+used to merge those from the EBBR network to derive the area-averaged surface
+latent and sensible heat fluxes.  In the previous version, only EBBR stations
+are used.</p>
+
+<p>6.   Several interpolation routines have been modified.  In particular, time
+interpolation of missing data is avoided as much as possible to account for the
+large daily and diurnal variability of several quantities.</p>
+
+<p>7.   Temperature, geopotential height, and dry static energy are re-balanced
+hydrostatically in each step of the variational routine.  This has been found 
+to improve consistencies of the temperature and dry static energy advections.</p>
+
+
+<p>There are two fortran source code files to read the data (for single-level
+fields and for multi-layer fields).   Everything is self-explained in the
+source files.  A list of the single-level fields and multi-layer fields in
+the data files is attached here.  I have included  fields in addition to
+those for running SCMs in the data files for your diagnostic purpose.
+<p>More detailed information about the variational analysis method can be found 
+in Zhang and Lin (1997) and Zhang et al. (2001)</p>
+
+<p>Reference:</p>
+
+<p>Zhang, M.H. and J.L. Lin, 1997: Constrained variational analysis of sounding 
+      data based on column-integrated conservations of mass, heat, moisture,
+      and momentum: Approach and application to ARM measurements. J. Atmos. 
+      Sci., 54, 1503-1524. </p>
+
+<p>Zhang, M.H., J.L. Lin, R.T. Cederwall, J.J. Yio, and S.C. Xie, 2001: Objective
+       analysis of ARM IOP data: Method and sensitivity. Mon. Wea. 
+       Rev., 129, 295-311. </p>
+
+<p>Contacts:</p>
+
+<p>Minghua Zhang<br>
+   ITPA/MSRC <br>
+   SUNY at Stony Brook<br>
+   Stony Brook, NY 11794-5000 <br>
+   Tel: 631-632-8318<br>
+   Fax: 631-632-8820 or 631-632-6251 <br>
+   email: mzhang@notes.cc.sunysb.edu</p>
+
+<p>Ric Cederwall<br>
+   ASD<br>
+   LLNL<br>
+   Livermore, CA 94550 <br>
+   Tel: 925-422-6831<br>
+   Fax: 925-425-5844 <br>
+   email: ric.cederwall@arm.gov</p>
+
+<p>John Yio<br>
+   ASD<br>
+   LLNL<br>
+   Livermore, CA 94550 <br>
+   Tel: 925-422-0233<br>
+   Fax: 925-425-5844 <br>
+   email: john.yio@arm.gov</p>
+
+<p>Shaocheng Xie<br>
+   ASD<br>
+   LLNL<br>
+   Livermore, CA 94550 <br>
+   Tel: 925-422-6023<br>
+   Fax: 925-425-5844 <br>
+   email: shaocheng.xie@arm.gov</p>
+
+<p>-------------------------------------------------------<br>
+Single-level time series:  data(time)<br>
+1       'Calender_day',   <br>
+2       'Year', <br>
+3       'Month',<br>
+4       'Day',      <br>        
+5       'Hour',         <br>         
+6       'Minute', <br>
+7       'Prec(mm/hour)',   <br>
+8       'LH_(upward_W/m2)',    <br>  
+9       'SH_(upward_W/m2)', <br>
+10       'Area_Mean_Ps(mb)',<br>
+11      'Central_Facility_Ps(mb)', <br>
+12      'Ts_Air(C)', <br>
+13       'Tg_Soil(C)',   <br>   
+14      'Sfc_Air_RH(%)',    <br>
+15      'Srf_wind_speed(m/s)', <br>
+16      'u_wind_(m/s)',    <br>
+17      'v_wind(m/s)',      <br>
+18      'Srf_Net_Dn_Rad(W/m2)', <br>
+19      'TOA_LW_Up(W/m2)', <br>
+20      'TOA_SW_Dn(W/m2)',  <br>
+21      'TOA_Insolation(W/m2)', <br>      
+22       'GOES_Lowcld(%)',  <br>
+23      'GOES_Midcld(%) ',   <br>
+24      'GOES_Hghcld(%)',     <br>
+25      'GOES_Totcld(%)',  <br>
+26      'Cld_Thickness(km)', <br>
+27      'Cld_Top_ht(km)',   <br>
+28      'MWR_Cld_liquid(cm)', <br>
+29      'd(Column_H2O)/dt(mm/hour)',       <br>
+30      'Column_H2O_Advection(mm/hour)',<br>
+31      'Srf_Evaporation(mm/hour)',<br>
+32      'd(Column_Dry_Static_Energy)/dt(W/m2)', <br>
+33      'Column_Dry_Static_Energy_Advection(W/m2)', <br>
+34      'Column_Radiative_Heating(W/m2)',        <br>
+35      'Column_Latent_heating(W/m2)' <br>
+36      'omega_surface_(mb/hr)'<br>
+37      'qs_surface_(g/kg)', <br>
+38      's_surface_(K)',<br>
+39      'MWR_precip_water_(cm)', <br>
+40      'Siros_Srf_LWUP_(W/m2)'<br>
+41      'Siros_Srf_LWDN_(W/m2)',<br>
+42      'Siros_Srf_SWUP_(W/m2)'<br>
+43      'Siros_Srf_SWDN _(W/m2)' ] <br> 
+
+
+<p>Multi-layer fields:  data(pressure,time)<br>
+1       'Temp_(K)',                        <br>
+2       'Water_Vapor_Mixing_Ratio_(g/kg)',    <br>
+3       'u_wind_(m/s)',                    <br>
+4       'v_wind_(m/s)',                <br>
+5       'omega_(mb/hour)',                 <br>
+6       'Wind_Divergence_(1/s)',   <br>
+7       'Horizontal_Temp__Advec_(K/hour)', <br>
+8       'Vertical_Temp_Advec_(K/hour)',<br>
+9       'Horizontal_q_Advec_(g/kg/hour)',  <br>
+10      'Vertical_q_Advec_(g/kg/hour)',<br>
+11      's(Dry_Static_Energy/Cp)(K)',      <br>   
+12      'Horizontal_s_Advec_(K/hour)',<br>
+13      'Vertical_s_Advec(K/hour)',       <br> 
+14      'ds/dt(K/hour)',       <br>
+15      'DT/dt(K/hour)',           <br>        
+16      'dq/dt_(g/kg/hour)',   <br>
+17      'Q1_(k/hour)',             <br>        
+18      'Q2_(k/hour)' / <br>
+
+<p>All relevant variables represent area-means in a domain enclosed by the
+following 12 grids centered around the ARM Central Facility.  These 12 grids 
+are boundary facilities, profiler stations and analysis grids<br>
+longitude<br>
+-97.2956     -98.3165     -99.0911     -99.3289     -99.2175     -98.5725<br>
+-97.5186     -96.5619     -95.8633     -95.5513     -95.6347     -96.3023<br>
+latitude<br>
+38.3092      38.2207      37.6522      36.8885      36.0719      35.2734<br>
+34.9797      35.1246      35.6825      36.5223      37.3800      38.0408<br>
+Central Facility<br>
+-97.4900     36.6100<br>
+
+<p>Also available under the <b>ncdc-synop-maps</b> directory are the Surface and Upper Air Weathe
+r Charts from the National Climatic Data Center.  These data are in png file format.<br>
+
+
+<p>Regular ARM data collected during the IOP are available via the ARM Archive User Interface 
+<a href = "http://www.archive.arm.gov/cgi-bin/arm-archive"><b>http://www.archive.arm.gov/cgi-bin/arm-archive</b></a>
+In particular, the following data sets may be of interest to SCM research scientists:</p>
+<ul>
+<li>sgpsondewrpnFn.a1 - 3 hourly soundings at facilities Fn=C1, B1, B4, B5, B6</li>
+<li>sgpsondewndcalcFn.c1 - calculated winds for above soundings</li>
+<li>sgpblcC1.a1 - 30 second cloud base height data</li>
+<li>sgpbsrnC1.a1 - 1 minute direct and total irradiance</li>
+<li>sgpaeri01summaryC1.a1 - 3 minute average spectral radiance and brightness temperature</li>
+<li>sgp30smosEn.a1 - 30 minute average surface met data from extended facilities En=E8, E9, E13, E15, E20</li>
+<li>sgp30ebbrEn.a1 - 30 minure average energy balance bowen ration data from extended facilities En=E4, E7, E8, E9, E12, E13, E15, E20, E22, E26</li>
+<li>sgpsirosEn.a1 - 15 second spectral and broadband irradiance data fron extended facilities En=E9, E13, E15, E20</li>
+<li>sgp915rwptempC1.a2 - hourly virtual temperature from the 915 MHz RASS Wind Profiler</li> 
+<li>sgp50rwptempC1.a2 - hourly virtual temperature from the 50 MHz RASS Wind Profiler</li> 
+<li>sgp915rwpwindC1.a2 - hourly horizontal wind speed and direction from the 915 MHz RASS Wind Profiler</li> 
+<li>sgp50rwpwindC1.a2 - hourly horizontal wind speed and direction from the 50 MHz RASS Wind Profiler</li> 
+<li>sgp30twr60mC1.a1 - 30 minute average met data from the 60m tower</li>
+<li>sgp05okmX1.a1 - 5 minute average data from the Oklahoma Mesonet</li>
+<li>sgp5mwravgFn.c1 - 5 minute average data from the microwave radiometers at facilities Fn=C1, B1, B4, B5, B6</li>
+<li>sgpmplcbh1scottC1.c1 - 1 minute cloud base height data from the MPL using the Scott etal algorithm</li>
+<li>sgpmfr25mC1.a1 - spectral and broadband irradiance from the 25m level of the tower</li>
+<li>sgpmfr10mC1.a1 - spectral and broadband irradiance from the 10m level of the tower</li>
+<li>sgp60wpdnwndsX1.b1 - hourly NOAA wind profiler data</li>
+<li>sgpabrfcpcpX1.c1 - hourly radar-based precipitation estimates at 4km resolution</li></ul>
+<hr>
+Contact: Ric Cederwall at <a href="mailto:ric.cederwall@arm.gov">ric.cederwall@arm.gov</a>
+</body></html>

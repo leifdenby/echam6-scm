@@ -1,0 +1,70 @@
+base_time,Base time in Epoch,seconds since 1970-1-1 0:00:00 0:00,
+time_offset,Time offset from base_time,seconds,time
+time,Epoch Time,days since 1970-1-1 0,time
+starting_Julian_date,Julian Date of the day in which base_time falls,-th day of the year of base_time,
+x,Longitude,degrees_east,x
+y,Latitude,degrees_north,y
+lev,Pressure Levels,hP,lev
+Year,Current year, ,time
+Month,Current month, ,time
+Day,Current calendar day, ,time
+phis,Surface Geopotential,m2/s2,y x
+Prec,Precipitation,mm/hour,time y x
+LH,Surface Latent Heat Flux,W/m2,time y x
+SH,Surface Sensible Heat Flux,W/m2,time y x
+Area_Mean_Ps,Area Mean Surface Pressure,mb,time y x
+Ptend_Mean,Area Mean Surface Pressure Tendency,mb/hour,time y x
+Central_Facility_Ps,Central Facility Surface Pressure,mb,time y x
+Ptend_C1,Central Facility Surface Pressure Tendency,mb/hour,time y x
+Ts_Air,Surface Air Temperature,C,time y x
+Tg_Soil,Tg Soil,C,time y x
+Sfc_Air_RH,Sfc Air RH,%,time y x
+Srf_wind_speed,Srf Wind Speed,m/s,time y x
+u_wind_surface,Srf U Wind,m/s,time y x
+v_wind_surface,Srf V Wind,m/s,time y x
+Srf_Net_Dn_Rad,Srf Net Dn Rad,W/m2,time y x
+TOA_LW_Up,TOA LW Up,W/m2,time y x
+TOA_SW_Dn,TOA SW Dn,W/m2,time y x
+TOA_Ins,TOA Ins,W/m2,time y x
+GOES_Lowcld,GOES Lowcld,%,time y x
+GOES_Midcld,GOES Midcld,%,time y x
+GOES_Hghcld,GOES Hghcld,%,time y x
+GOES_Totcld,GOES Totcld,%,time y x
+Cld_Thickness,Cld Thickness,km,time y x
+Cld_Top_ht,Cld Top ht,km,time y x
+MWR_Cld_liquid,MWR Cld liquid,cm,time y x
+dColumn_H2O_dt,Rate of Change in Column Water,mm/hour,time y x
+Column_H2O_Advection,Column H2O Advection,mm/hour,time y x
+Srf_Evaporation,Srf Evaporation,mm/hour,time y x
+dColumn_Dry_Static_Energy_dt,dColumn Dry Static Energy_dt,W/m2,time y x
+Column_Dry_Static_Energy_Advection,Column Dry Static Energy Advection,W/m2,time y x
+Column_Radiative_Heating,Column Radiative Heating,W/m2,time y x
+Column_Latent_heating,Column Latent Heating,W/m2,time y x
+omega_surface,Surface omega,mb/hr,time y x
+qs_surface,Surface Sat. W.V. Mixing Ratio,kg/kg,time y x
+s_surface,Surface Dry Static Energy,K,time y x
+MWR_precip_water,MWR precipitable water,cm,time y x
+Siros_Srf_LWUP,Siros Surface LW Up,W/m2,time y x
+Siros_Srf_LWDN,Siros Surface LW Down,W/m2,time y x
+Siros_Srf_SWUP,Siros Surface LW Up,W/m2,time y x
+Siros_Srf_SWDN,Siros Surface LW Down,W/m2,time y x
+Temp,Temperature,K,time lev y x
+H2O_Mixing_Ratio,W.V. Mixing Ratio,g/kg,time lev y x
+u_wind,U Windspeed,m/s,time lev y x
+v_wind,V Windspeed,m/s,time lev y x
+omega,Vertical Pressure Velocity,mb/hour,time lev y x
+Wind_Div,Wind_Div,s-1,time lev y x
+Horizontal_Temp_Advec,Horizontal T Advective Tendency,K/hour,time lev y x
+Vertical_T_Advec,Vertical T Advective Tendency,K/hour,time lev y x
+Horizontal_q_Advec,Horizontal q Advective Tendency,g/kg/hour,time lev y x
+Vertical_q_Advec,Vertical Q Advective Tendency,g/kg/hour,time lev y x
+s,Dry_Static_Energy,K,time lev y x
+Horizontal_s_Advec,Horizontal_s_Advec,K/hour,time lev y x
+Vertical_s_Advec,Vertical_s_Advec,K/hour,time lev y x
+ds_dt,ds/dt,K/hour,time lev y x
+DT_dt,DT/dt,K/hour,time lev y x
+Dq_dt,PWV,cm,time lev y x
+Q1,Q1,K/hour,time lev y x
+Q2,Q2,K/hour,time lev y x
+ARSCL_Cld,ARSCL_Cld,%,time lev y x
+PWV,PWV,cm,time lev y x
